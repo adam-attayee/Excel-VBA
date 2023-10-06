@@ -10,13 +10,11 @@ Sub MergeExcelFiles()
 
 
     ' Set the path to the folder containing the Excel files
-    MyPath = "C:\Users\s4511680\Desktop\Temp\Test\" ' Change this to your folder path
-
+    MyPath = "C:\Users\username\Desktop\Temp\Test\" ' Folder path
 
     ' Set the master workbook
     Set MasterWorkbook = Workbooks.Add
 
-   
     ' Initialize the LastRow variable for pasting data in the master workbook
     LastRow = 1
   
@@ -24,7 +22,6 @@ Sub MergeExcelFiles()
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
 
-  
     ' Loop through all files in the folder
     MyFile = Dir(MyPath & "*.*")
 
@@ -33,20 +30,16 @@ Sub MergeExcelFiles()
         FileExtension = Right(MyFile, Len(MyFile) - InStrRev(MyFile, "."))
 
         If FileExtension = "xlsx" Or FileExtension = "xls" Then
-
             ' Open the source workbook
             Set SourceWorkbook = Workbooks.Open(MyPath & MyFile)
       
-
             ' Copy data from the first sheet of the source workbook to the master workbook
             Set SourceWorksheet = SourceWorkbook.Sheets(1)
             SourceWorksheet.UsedRange.Copy Destination:=MasterWorkbook.Sheets(1).Cells(LastRow, 1)
             LastRow = LastRow + SourceWorksheet.UsedRange.Rows.Count
 
-           
             ' Close the source workbook without saving
             SourceWorkbook.Close SaveChanges:=False
-
         End If
        
         ' Get the next file in the folder
@@ -55,11 +48,10 @@ Sub MergeExcelFiles()
     Loop
 
     ' Save the master workbook with a desired name and path
-    MasterWorkbook.SaveAs "C:\Users\s4511680\Desktop\Temp\Test\MasterWorkbook.xlsx" ' Change this to your desired path and filename
+    MasterWorkbook.SaveAs "C:\Users\username\Desktop\Temp\Test\MasterWorkbook.xlsx" ' Desired path and filename
 
     ' Re-enable updates and alerts
     Application.ScreenUpdating = True
-
     Application.DisplayAlerts = True
 
     ' Close the master workbook
