@@ -1,0 +1,70 @@
+Sub MergeExcelFiles()
+
+    Dim MasterWorkbook As Workbook
+    Dim SourceWorkbook As Workbook
+    Dim SourceWorksheet As Worksheet
+    Dim MyPath As String
+    Dim MyFile As String
+    Dim FileExtension As String
+    Dim LastRow As Long
+
+
+    ' Set the path to the folder containing the Excel files
+    MyPath = "C:\Users\s4511680\Desktop\Temp\Test\" ' Change this to your folder path
+
+
+    ' Set the master workbook
+    Set MasterWorkbook = Workbooks.Add
+
+   
+    ' Initialize the LastRow variable for pasting data in the master workbook
+    LastRow = 1
+  
+    ' Disable updates and alerts to speed up the process
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+
+  
+    ' Loop through all files in the folder
+    MyFile = Dir(MyPath & "*.*")
+
+    Do While MyFile <> ""
+        ' Check if the file is an Excel file
+        FileExtension = Right(MyFile, Len(MyFile) - InStrRev(MyFile, "."))
+
+        If FileExtension = "xlsx" Or FileExtension = "xls" Then
+
+            ' Open the source workbook
+            Set SourceWorkbook = Workbooks.Open(MyPath & MyFile)
+      
+
+            ' Copy data from the first sheet of the source workbook to the master workbook
+            Set SourceWorksheet = SourceWorkbook.Sheets(1)
+            SourceWorksheet.UsedRange.Copy Destination:=MasterWorkbook.Sheets(1).Cells(LastRow, 1)
+            LastRow = LastRow + SourceWorksheet.UsedRange.Rows.Count
+
+           
+            ' Close the source workbook without saving
+            SourceWorkbook.Close SaveChanges:=False
+
+        End If
+       
+        ' Get the next file in the folder
+        MyFile = Dir
+
+    Loop
+
+    ' Save the master workbook with a desired name and path
+    MasterWorkbook.SaveAs "C:\Users\s4511680\Desktop\Temp\Test\MasterWorkbook.xlsx" ' Change this to your desired path and filename
+
+    ' Re-enable updates and alerts
+    Application.ScreenUpdating = True
+
+    Application.DisplayAlerts = True
+
+    ' Close the master workbook
+    MasterWorkbook.Close SaveChanges:=False
+
+    MsgBox "Merge complete!"
+
+End Sub
